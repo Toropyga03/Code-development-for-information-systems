@@ -5,6 +5,10 @@ DB_NAME = 'exchange_rates.db'
 
 
 def init_db():
+    """
+    Инициализация БД. Создаёт таблицу со столбцами:
+    id, имя валюты, курс, дата обновления
+    """
     with sqlite3.connect(DB_NAME) as conn:
         cur = conn.cursor()
 
@@ -19,6 +23,13 @@ def init_db():
 
 
 def save_rate(target_currency: str, rate: float):
+    """
+    Сохранение данных о курсе валют в БД
+
+    Args:
+        target_currency: код валюты (например, 'USD', 'EUR')
+        rate: курс валюты
+    """
     with sqlite3.connect(DB_NAME) as conn:
         cur = conn.cursor()
 
@@ -34,6 +45,18 @@ def save_rate(target_currency: str, rate: float):
 
 
 def get_saved_rate(target_currency: str) -> float:
+    """
+    Получение курса по имени валюты из БД
+
+    Args:
+        target_currency: код валюты (например, 'USD', 'EUR')
+
+    Returns:
+        float: курс валюты
+
+    Raises:
+        ValueError: если валюта не найдена в БД
+    """
     with sqlite3.connect(DB_NAME) as conn:
         cur = conn.cursor()
 
@@ -52,4 +75,5 @@ def get_saved_rate(target_currency: str) -> float:
             raise ValueError(f"Курс для валюты {target_currency} не найден в базе данных")
 
 
+# Инициализируем базу данных при импорте модуля
 init_db()
